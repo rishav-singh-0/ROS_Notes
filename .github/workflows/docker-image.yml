@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build ./Docker/melodic --file Dockerfile --tag ros-melodic:$(date +%s)
+      run: docker build . --file ./Docker/Dockerfile-melodic --tag ros-melodic:$(date +%s)
