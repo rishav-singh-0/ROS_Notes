@@ -6,8 +6,6 @@ on:
     paths:
       - "./Docker/Dockerfile-melodic"
       - ".github/workflows/docker-publish-melodic.yml"
-  pull_request:
-    branches: [ main ]
 
 jobs:
   push_to_registry:
@@ -46,6 +44,5 @@ jobs:
           context: .
           file: ./Docker/Dockerfile-melodic
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: melodic
           labels: ${{ steps.meta.outputs.labels }}
-
