@@ -44,5 +44,6 @@ jobs:
           context: .
           file: ./Docker/Dockerfile-melodic
           push: ${{ github.event_name != 'pull_request' }}
-          tags: melodic
+          tags: rishavsingh0/ros:melodic
           labels: ${{ steps.meta.outputs.labels }}
+          # platforms: linux/amd64, linux/arm64, linux/arm/v7, darwin/amd64
