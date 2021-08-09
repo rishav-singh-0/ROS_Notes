@@ -25,20 +25,22 @@ ENV LC_ALL C.UTF-8
 ENV ROS_DISTRO melodic
 
 # install ros packages
-RUN apt-get update && apt-get install -y \
+RUN set -x \
+    && apt-get update && apt-get install -y \
     ros-melodic-desktop-full \
     && echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
 
 # rosdep setup and catkin installation
 RUN set -ex \
-    && apt-get install -y python-rosdep ros-melodic-catkin python-catkin-tools ros-melodic-std-msgs \
+    && apt-get install -y \
+    python-rosdep ros-melodic-catkin python-catkin-tools ros-melodic-std-msgs \
     && rosdep init \
     && rosdep update
 
 # catkin_ws setup
-RUN mkdir --parents ~/catkin_ws/src && cd ~/catkin_ws \
-    && catkin init \
-    && catkin build \
+RUN set -ex \
+    && mkdir --parents ~/catkin_ws/src && cd ~/catkin_ws \
+    && /bin/bash -c "cd ~/catkin_ws && . /opt/ros/melodic/setup.bash && catkin init && catkin build" \
     && echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
 
 
