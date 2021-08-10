@@ -37,6 +37,9 @@ RUN set -ex \
     && rosdep init \
     && rosdep update
 
+# Solving gazebo error
+COPY ./.ignition /root/.ignition
+
 # catkin_ws setup
 RUN set -ex \
     && mkdir --parents ~/catkin_ws/src && cd ~/catkin_ws \
