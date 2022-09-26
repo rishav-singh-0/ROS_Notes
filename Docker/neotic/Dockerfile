@@ -32,9 +32,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 RUN set -x \
     && apt-get update && apt-get install -y --no-install-recommends \
-    # ros-melodic-desktop-full \
-    ros-noetic-desktop-full=1.5.0-1* \
-    && echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> /root/bashrc
+    ros-noetic-desktop-full \
+    && echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> /root/.bashrc
 
 # install bootstrap tools
 RUN set -ex \
@@ -42,18 +41,22 @@ RUN set -ex \
     build-essential \
     python3-rosdep \
     python3-rosinstall \
+    python3-rosinstall-generator \
+    python3-wstool \
     python3-vcstools \
     && rm -rf /var/lib/apt/lists/*
 
 # bootstrap rosdep
 RUN rosdep init && \
-  rosdep update --rosdistro $ROS_DISTRO
+  rosdep update
 
 # catkin installation and setup
-# RUN set -ex \
-#     && apt-get install -y \
-#     ros-melodic-catkin python-catkin-tools ros-melodic-std-msgs \
-#     && mkdir --parents /root/catkin_ws/src && cd /root/catkin_ws \
-#     && /bin/bash -c "cd /root/catkin_ws && . /opt/ros/$ROS_DISTRO/setup.bash && catkin init && catkin build" \
-#     && echo "source /root/catkin_ws/devel/setup.bash" >> /root/.bashrc
+RUN set -ex \
+    && apt-get install -y \
+    ros-noetic-catkin python3-catkin-tools \
+    ros-noetic-ros-tutorials \
+    && mkdir --parents /root/catkin_ws/src && cd /root/catkin_ws \
+    && /bin/bash -c "cd /root/catkin_ws && . /opt/ros/$ROS_DISTRO/setup.bash && catkin_init_workspace && catkin_make" \
+    && echo "source /root/catkin_ws/devel/setup.bash" >> /root/.bashrc
 
+ENTRYPOINT ["/bin/bash"]
