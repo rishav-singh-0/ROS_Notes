@@ -54,8 +54,9 @@ RUN rosdep init && \
 
 # catkin installation and setup
 RUN set -ex \
-    && mkdir -p /root/catkin_ws/src && cd /root/catkin_ws \
-    && /bin/bash -c "cd /root/catkin_ws/src && . /opt/ros/$ROS_DISTRO/setup.bash && catkin_init_workspace" \
+    && mkdir -p /root/catkin_ws/src \
+    && source /opt/ros/$ROS_DISTRO/setup.bash \
+    && /bin/bash -c "cd /root/catkin_ws/src && catkin_init_workspace" \
     && /bin/bash -c "cd /root/catkin_ws/ && catkin_make" \
     && echo "\nsource /root/catkin_ws/devel/setup.bash" >> /root/.bashrc
 
