@@ -28,11 +28,10 @@ ENV LC_ALL C.UTF-8
 ENV ROS_DISTRO noetic
 
 # install ros packages
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    && rm -rf /var/lib/apt/lists/*
 RUN set -x \
     && apt-get update && apt-get install -y --no-install-recommends \
     ros-noetic-desktop-full \
+    && rm -rf /var/lib/apt/lists/* \
     && echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> /root/.bashrc
 
 # install bootstrap tools
@@ -44,6 +43,9 @@ RUN set -ex \
     python3-rosinstall-generator \
     python3-wstool \
     python3-vcstools \
+    ros-noetic-catkin \
+    python3-catkin-tools \
+    ros-noetic-ros-tutorials \
     && rm -rf /var/lib/apt/lists/*
 
 # bootstrap rosdep
@@ -52,9 +54,6 @@ RUN rosdep init && \
 
 # catkin installation and setup
 RUN set -ex \
-    && apt-get install -y \
-    ros-noetic-catkin python3-catkin-tools \
-    ros-noetic-ros-tutorials \
     && mkdir --parents /root/catkin_ws/src && cd /root/catkin_ws \
     && /bin/bash -c "cd /root/catkin_ws && . /opt/ros/$ROS_DISTRO/setup.bash && catkin_init_workspace && catkin_make" \
     && echo "source /root/catkin_ws/devel/setup.bash" >> /root/.bashrc
